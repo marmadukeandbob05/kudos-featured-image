@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Pixabay API</title>
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+  <link rel="stylesheet" href="application.css">
+</head>
+<body style="font-family: 'Open Sans', sans-serif;background-color: #fff;font-weight: normal">
+  <br>
+  <br>
+  <div style="width: 600px;min-width: 600px;margin-left: auto; margin-right: auto;">
+    <div class="panel panel-dashboard bordered">
+    <div class="panel-heading">Add a featured image</div>
+    <div class="panel-body panel-body-intimate" style="position: relative;">
+      <div style="width: 40%; padding: 10px; float: right;">
+        <img id="selImg" src="/none.png" style="padding: 10px; width: 100%;float: right;object-fit: cover;height: 150px;" alt="">
+        <a id="reset" style="float: right;width: 40%;">Remove Image</a>
+      </div>
+      <div style="width: 100%;padding: 10px;">
+        <h6 style="font-weight: 300; font-size: 15px;color: #777;">Select a featured image for your publication. This will help your publication stand out and allows us to feature it on the Kudos Showcase. </h6>
+        <div id="expand">
+          <br>
+          <br>
+          <br>
+          <br>
+          <input id="op1" style="margin-left: 20px;" type="radio" name="opt" checked><h4 id="op1t" style="display: inline;font-weight: normal;">&nbsp;Search for an image</h4>
+          <br>
+          <input id="op2" style="margin-left: 20px;" type="radio" name="opt"><h4 id="op2t" style="display: inline;font-weight: normal;">&nbsp;Use an abstract image</h4>
+          <br>
+          <br>
+          <input id="search" type="text"  style="margin-bottom: 10px;margin-left: 20px;border: 1px solid #d8d8d8; border-radius: 5px;line-height: 30px;width: 300px;font-size: 15px;padding: 5px;font-weight: normal;" placeholder="Type one or two keywords..."/>
+          <button class="btn btn-primary block btn-lg" style="margin-top: -5px;" id="go">Search</button>
+
+          <div class="adaptive1" style="margin-left: 20px;">
+            <style>
+              a {
+                text-decoration: none;
+                color: #4285f4;
+              }
+            </style>
+            <p style="font-size: 13px;">Examples: <a id="med">medicine</a>, <a id="atom">atomic structure</a>, <a id="env">environment</a>, <a id="wind">wind farm</a>, <a id="edu">education</a></p>
+            <div id="results1" style="overflow-x: scroll;white-space: nowrap;border: 1px solid #d8d8d8;border-radius: 5px;padding: 10px;text-align: center;width: 100%;height: 180px;"></div>
+            <br>
+            <div style="text-align: center;">
+            <button class="use btn btn-primary block btn-lg" id="go">Use selected image</button>
+            &nbsp;&nbsp;
+            <button class="ca btn btn-primary block btn-lg" style="background-color: #d8d8d8;border: 1px solid #d8d8d8; color: #000;">Cancel</button>
+            </div>
+            <br>
+            <p>Images are right free and provided by <a href="http://pixabay.com">Pixabay</a>.</p>
+          </div>
+          <div class="adaptive2" style="margin-left: 20px;">
+            <br>
+            <div id="results2" style="overflow-x: scroll;white-space: nowrap;border: 1px solid #d8d8d8;border-radius: 5px;padding: 10px;text-align: center;width: 100%;height: 180px;"></div>
+            <br>
+            <div style="text-align: center;">
+            <button class="use btn btn-primary block btn-lg" id="go">Use selected image</button>
+            &nbsp;&nbsp;
+            <button class="ca btn btn-primary block btn-lg" style="background-color: #d8d8d8;border: 1px solid #d8d8d8; color: #000;">Cancel</button>
+            </div>
+            <br>
+            <p>Images are right free and provided by <a href="http://pixabay.com">Pixabay</a>.</p>
+          </div>
+        </div>
+      </div>
+      <button id="ex" style="position: absolute; bottom: 10px; left: 10px;" class="btn btn-primary block btn-lg">Select image</button>
+      <script>
+        $(".ca").click(function() {
+          $(".adaptive1, .adaptive2").hide();
+          $("#search").hide();
+          $("#op1, #op2, #op1t, #op2t").hide();
+          $("#go").hide();
+          $("#ex").show();
+          selectedImage = "";
+          $("#op1").prop("checked", true);
+          $("img[class='image']").css({
+            "outline" : "none",
+            "box-shadow" : "none"
+          });
+        })
+
+      </script>
+    </div>
+  </div>
+
+  <script>
+    function preset(select, text) {
+      $("#" + select).click(function() {
+        $("#search").val(text);
+        $("#go").trigger("click");
+      })
+    }
+
+    preset("med", "Medicine");
+    preset("atom", "Atomic Structure");
+    preset("env", "Environment");
+    preset("wind", "Wind Farm");
+    preset("edu", "Education");
+  </script>
+
+  <script>
+    selectedImage = "";
+
+    $("#reset").hide();
+
+    $("#reset").click(function() {
+      selectedImage = "";
+      $("#selImg").attr("src", "/none.png");
+      $("#reset").hide();
+    });
+
+    $("#expand").hide();
+    $("#ex").click(function() {
+      $(".adaptive1").show();
+      $("#search").hide();
+      $("#expand").show();
+      $("#op1, #op2, #op1t, #op2t").show();
+      $("#go").show();
+      $("#ex").hide();
+      $("#search").show();
+    });
+
+    $("#op1").click(function() {
+      $("#search").show();
+      $("#go").show();
+    });
+
+    $("#op2").click(function() {
+      $("#search").hide();
+      $("#go").hide();
+    });
+
+    $('#search').keypress(function(event){
+      if(event.keyCode == 13){
+        if (($("#search").val() != "")) {
+          $('#go').click();
+        }
+      }
+    });
+
+    $("#search").on("input", function() {
+      if ($(this).val() == "") {
+        $("#go").prop("disabled", true);
+      } else {
+        $("#go").prop("disabled", false);
+      }
+    });
+
+    if ($("#search").val() == "") {
+      $("#go").prop("disabled", true);
+    }
+  </script>
+
+  <style>
+      input::placeholder {
+        color: #8c8c8c;
+      }
+    </style>
+
+
+  <script>
+    function Shuffle(o) {
+    	for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    	return o;
+    };
+
+      $(".adaptive2").hide();
+      $("#op1").click(function() {
+        $(".adaptive1").show();
+        $(".adaptive2").hide();
+      });
+      $("#op2").click(function() {
+        $(".adaptive2").show();
+        $(".adaptive1").hide();
+      });
+      function reload() {
+        images = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+        Shuffle(images)
+        for (x=1;x<21;x++) {
+          index = x-1
+          $("#results2").append("<img src='/img/texture" + images[index] + ".jpg' class='image'>");
+        }
+      }
+
+      reload();
+
+      var API_KEY = '9202699-d3e88102b2d40edc1ecf555c9';
+      $("#go").click(function() {
+        var URL = "https://pixabay.com/api/?safesearch=true&key=" + API_KEY + "&q=" + encodeURIComponent($("#search").val());
+        $.getJSON(URL, function(data){
+        if (parseInt(data.totalHits) > 0) {
+          $("#results1").html("");
+          $.each(data.hits, function(i, hit){
+            $("#results1").append("<img src='" + hit.webformatURL + "' class='image'>")
+          });
+          setListener();
+        } else{
+          $("#results1").html("<h6 style='font-size: 20px;font-weight: 300;'><br>Sorry - we couldn’t find any relevant images.<br>Please try again using different search terms.</h6>")
+        }});
+      });
+
+      function setListener() {
+        $("img[class='image']").click(function() {
+          $("img[class='image']").css({
+            "outline" : "none",
+            "box-shadow" : "none"
+          });
+          $(this).css({
+            "outline" : "none",
+            "box-shadow" : "0px 0px 20px #ed5c25"
+          });
+          selectedImage = $(this).attr("src");
+        });
+      }
+
+      setListener();
+
+      setInterval(function(){
+        if(selectedImage != "") {
+          $(".use").prop("disabled", false);
+        } else {
+          $(".use").prop("disabled", true);
+        }
+      }, 10);
+
+      $(".use").click(function() {
+        $(".adaptive1, .adaptive2").hide();
+        $("#search").hide();
+        $("#op1, #op2, #op1t, #op2t").hide();
+        $("#go").hide();
+        $("#ex").show();
+        $("#op1").prop("checked", true);
+        $("#selImg").attr("src", selectedImage);
+        selectedImage = "";
+        $("img[class='image']").css({
+          "outline" : "none",
+          "box-shadow" : "none"
+        });
+        $("#reset").show();
+      });
+
+
+    </script>
+
+  <style>
+      .image {
+        height: 150px;
+        margin: 5px;
+        border: 1px solid rgba(255, 255, 255, 0);
+      }
+    </style>
+
+
+
+</body>
+</html>

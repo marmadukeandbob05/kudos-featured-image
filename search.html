@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Pixabay API</title>
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+  <input id="search" type="text" placeholder="Search Kudos for...">
+  <button id="go">Go</button>
+  <br>
+  <br>
+  <div class="results"></div>
+  <style>
+    .image {
+      height: 200px;
+    }
+  </style>
+  <script>
+    var API_KEY = '9202699-d3e88102b2d40edc1ecf555c9';
+    $("#go").click(function() {
+      var URL = "https://pixabay.com/api/?key=" + API_KEY + "&q=" + encodeURIComponent($("#search").val());
+      $.getJSON(URL, function(data){
+      if (parseInt(data.totalHits) > 0) {
+        $(".results").html("");
+        $.each(data.hits, function(i, hit){
+          $(".results").append("<img src='" + hit.webformatURL + "' class='image'>")
+        });
+      } else{
+        console.log('No hits');
+      }});
+    });
+  </script>
+</body>
+</html>
