@@ -188,7 +188,7 @@
 
       reload();
 
-      var API_KEY = '9202699-d3e88102b2d40edc1ecf555c9';
+      var API_KEY = <YOUR_API_KEY>;
       $("#go").click(function() {
         var URL = "https://pixabay.com/api/?safesearch=true&key=" + API_KEY + "&q=" + encodeURIComponent($("#search").val());
         $.getJSON(URL, function(data){
